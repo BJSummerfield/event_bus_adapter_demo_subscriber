@@ -21,7 +21,7 @@ async fn main() {
 
     let exchange_name = "test_exchange";
     let queue_name = "test_queue";
-    let routing_key = "test.topic";
+    let routing_keys = vec!["test.topic", "test.healthcheck"];
 
     channel
         .exchange_declare(
@@ -42,16 +42,18 @@ async fn main() {
         .await
         .unwrap();
 
-    channel
-        .queue_bind(
-            queue.name().as_str(),
-            exchange_name,
-            routing_key,
-            QueueBindOptions::default(),
-            FieldTable::default(),
-        )
-        .await
-        .unwrap();
+    for routing_key in &routing_keys {
+        channel
+            .queue_bind(
+                queue.name().as_str(),
+                exchange_name,
+                routing_key,
+                QueueBindOptions::default(),
+                FieldTable::default(),
+            )
+            .await
+            .unwrap();
+    }
 
     // Set up the consumer
     let consumer = channel
