@@ -21,7 +21,7 @@ async fn main() {
 
     let exchange_name = "test_exchange";
     let queue_name = "test_queue";
-    let routing_keys = vec!["test.topic", "test.healthcheck"];
+    let routing_keys = vec!["test.topic"];
 
     channel
         .exchange_declare(
